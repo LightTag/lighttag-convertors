@@ -1,4 +1,6 @@
 from typing import List
+
+from conflict_resolver import resolve_annotation_conflicts
 from type_definitions.adm_types import ADMDoc, Entity, EntitiesList, ADMAttributes
 from type_definitions.lighttag_job import JobResult
 from type_definitions.lighttag_result_types import Example, Annotation
@@ -24,6 +26,7 @@ def convert_lighttag_example_to_adm(
     example: Example, reviewed_only
 ) -> ADMDoc:
     example = sort_example_annotations(example, reviewed_only=reviewed_only)
+    example['annotations'] = resolve_annotation_conflicts(example['annotations'])
     adm_annotations: List[Entity] = [
         convert_lighttatg_annotation_to_adm(anno) for anno in example["annotations"]
     ]

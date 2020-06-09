@@ -6,11 +6,11 @@ def filter_predicate_factory(reviewed_only:bool) -> Callable[[Annotation],bool]:
 
     if not reviewed_only:
         def predicate(anno: Annotation):
-            return anno['correct'] is not False
+            return anno['correct'] is not False and anno['start'] is not None
         return predicate
     else:
         def predicate(anno:Annotation):
-            return anno['correct'] is True
+            return anno['correct'] is True and anno['start'] is not None
     return predicate
 
 
