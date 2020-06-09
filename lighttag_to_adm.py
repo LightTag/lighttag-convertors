@@ -23,7 +23,7 @@ def convert_lighttatg_annotation_to_adm(anno: Annotation) -> Entity:
 
 
 def convert_lighttag_example_to_adm(
-    example: Example, reviewed_only
+    example: Example, reviewed_only, exclude_attributes
 ) -> ADMDoc:
     example = sort_example_annotations(example, reviewed_only=reviewed_only)
     example['annotations'] = resolve_annotation_conflicts(example['annotations'])
@@ -35,7 +35,11 @@ def convert_lighttag_example_to_adm(
         "itemType": "itemType",
         "items": adm_annotations,
     }
-    attributes: ADMAttributes = {"entities": entity_list}
+    if not exclude_attributes:
+        attributes: ADMAttributes = {"entities": entity_list}
+    else:
+        attributes: ADMAttributes = dict()
+
     result: ADMDoc = {
         "version": "1.1.0",
         "data": example["content"],
@@ -46,7 +50,8 @@ def convert_lighttag_example_to_adm(
     return result
 
 
-def save_lighttag_job_to_adm(job_data:JobResult,out_path:str,reviewed_only:bool =False,allow_overwrite=False):
+def save_lighttag_job_to_adm(job_data:JobResult,out_path:str,reviewed_only:bool =False,allow_overwrite=False,
+                             exclude_attributes=False):
     '''
     Takes a JSON as outputted from LightTag and creates ADMS in the structure expected by FTK
     Examples that have not been seen by a human are prefixed with u_ otherwise prefixed with a_
@@ -56,6 +61,7 @@ def save_lighttag_job_to_adm(job_data:JobResult,out_path:str,reviewed_only:bool 
     :param out_path:  The path to write the output to
     :param reviewed_only: If true, only reviewed data will be returned (False by default)
     :param allow_overwrite: Will write to an existing job directory if it exists (False by default)
+    :param exclude_attributes: Eliminate the attributes part from the adm to be used as an input for basis 'evaluate' (False by default)
     :return:  None, writes files to disk
     '''
     job_slug = make_slug(job_data['name'])
@@ -68,7 +74,8 @@ def save_lighttag_job_to_adm(job_data:JobResult,out_path:str,reviewed_only:bool 
         os.mkdir(job_path)
     for example in job_data['examples']:
         prefix = 'u' if len(example['seen_by']) ==0 else 'a'
-        adm = convert_lighttag_example_to_adm(example,reviewed_only=reviewed_only)
+        adm = convert_lighttag_example_to_adm(example,reviewed_only=reviewed_only,
+                                              exclude_attributes=exclude_attributes)
         adm_path = os.path.join(job_path,f"{prefix}_{example['example_id']}.adm.json")
         with open(adm_path,"w") as f:
             json.dump(adm,f)
