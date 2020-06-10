@@ -22,6 +22,19 @@ def convert_lighttatg_annotation_to_adm(anno: Annotation) -> Entity:
     return result
 
 
+
+def get_converted_metadata(example: Example):
+    res = dict()
+    for key, value in example["metadata"].items():
+        if type(value) is list:
+            res[key] = value
+        else:
+            res[key] = [ value]
+
+    res['lighttag_example_id']= [ example['example_id'] ]
+    return res
+
+
 def convert_lighttag_example_to_adm(
     example: Example, reviewed_only, exclude_attributes
 ) -> ADMDoc:
@@ -44,9 +57,8 @@ def convert_lighttag_example_to_adm(
         "version": "1.1.0",
         "data": example["content"],
         "attributes":attributes,
-        "documentMetadata": example["metadata"],
+        "documentMetadata": get_converted_metadata(example)
     }
-    result['documentMetadata']['lighttag_example_id']=example['example_id']
     return result
 
 
