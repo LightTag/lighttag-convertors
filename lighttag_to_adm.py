@@ -10,7 +10,7 @@ import os
 
 def convert_lighttatg_annotation_to_adm(anno: Annotation) -> Entity:
     result: Entity = {
-        "type": anno["tag"],
+        "type": anno["tag"].upper(),
         "mentions": [
             {
                 "startOffset": anno["start"],
@@ -90,7 +90,7 @@ def save_lighttag_job_to_adm(job_data:JobResult,out_path:str,reviewed_only:bool 
                                               exclude_attributes=exclude_attributes)
         adm_path = os.path.join(job_path,f"{prefix}_{example['example_id']}.adm.json")
         with open(adm_path,"w") as f:
-            json.dump(adm,f)
+            json.dump(adm, f, indent=2)
 
 
 

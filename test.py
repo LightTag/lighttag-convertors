@@ -6,5 +6,5 @@ save_lighttag_job_to_adm(data,
                          out_path="/tmp/nadav10", #Where to save it
                          allow_overwrite=True, #Allow overwriting a job
                          reviewed_only=False, # Only use reviewed annotations
-                         exclude_attributes=True
+                         exclude_attributes=False
                         )
