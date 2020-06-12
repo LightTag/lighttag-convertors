@@ -45,7 +45,7 @@ def convert_lighttag_example_to_adm(
     ]
     entity_list: EntitiesList = {
         "type": "list",
-        "itemType": "itemType",
+        "itemType": "entities",
         "items": adm_annotations,
     }
     if not exclude_attributes:
@@ -88,9 +88,9 @@ def save_lighttag_job_to_adm(job_data:JobResult,out_path:str,reviewed_only:bool 
         prefix = 'u' if len(example['seen_by']) ==0 else 'a'
         adm = convert_lighttag_example_to_adm(example,reviewed_only=reviewed_only,
                                               exclude_attributes=exclude_attributes)
-        adm_path = os.path.join(job_path,f"{prefix}_{example['example_id']}.adm.json")
+        adm_path = os.path.join(job_path, f"{prefix}_{example['example_id']}.adm.json")
         with open(adm_path,"w") as f:
-            json.dump(adm, f, indent=2)
+            json.dump(adm, f, indent=2, ensure_ascii=False)
 
 
 
