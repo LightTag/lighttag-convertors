@@ -5,12 +5,26 @@ from type_definitions.adm_types import ADMDoc, Entity, EntitiesList, ADMAttribut
 from type_definitions.lighttag_job import JobResult
 from type_definitions.lighttag_result_types import Example, Annotation
 from utils import sort_example_annotations, make_slug
+from configuration import ConfigurationUtil
 import json
 import os
 
+
+config = ConfigurationUtil.get_configuration()
+
+lt2adm_tags_names = config['LIGHTTAG2ADMMAPPING']['TAGS']
+
+
+def convert_lt_tag_name_to_odm_name(lt_name):
+    if lt_name in lt2adm_tags_names.keys():
+        return lt2adm_tags_names[lt_name]
+    else:
+        return lt_name
+
+
 def convert_lighttatg_annotation_to_adm(anno: Annotation) -> Entity:
     result: Entity = {
-        "type": anno["tag"].upper(),
+        "type": convert_lt_tag_name_to_odm_name(anno["tag"]),
         "mentions": [
             {
                 "startOffset": anno["start"],
