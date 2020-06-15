@@ -10,6 +10,7 @@ def default_example_id_fn(doc: ADMDoc) -> str:
 
 
 def default_tag_name_extractor(entity: Entity) -> str:
+
     return entity["type"]
 
 
@@ -22,7 +23,8 @@ def adm_doc_to_lighttag_suggetions(
 
     :param doc:  An ADMDoc container the predictions from Rosette
     :param example_id_fn: A function that extracts the LightTag example_id from the adm doc
-    :return:
+    :param lighttag_tag_name_extractor: A function that converts the entity type into the name of the tag in LightTag
+    :return: LightTag suggestions to be sent to LightTag
     """
     example_id = example_id_fn(doc)
     predictied_entities = doc["attributes"]["entities"]["items"]
@@ -42,9 +44,22 @@ def adm_doc_to_lighttag_suggetions(
 
 
 def adm_document_list_to_lighttag_suggestions(
-    docs: List[ADMDoc], example_id_fn: Callable[[ADMDoc], str] = default_example_id_fn
+    docs: List[ADMDoc],
+    example_id_fn: Callable[[ADMDoc], str] = default_example_id_fn,
+    lighttag_tag_name_extractor: Callable[[Entity], str] = default_tag_name_extractor,
 ):
+    """
+
+    :param docs: A list of ADM Docs
+    :param example_id_fn:
+    :param lighttag_tag_name_extractor:
+    :return: LightTag suggestions to be sent to LightTag
+    """
     suggestions: List[LTSuggestionInput] = []
     for doc in docs:
-        suggestions += adm_doc_to_lighttag_suggetions(doc, example_id_fn)
+        suggestions += adm_doc_to_lighttag_suggetions(
+            doc,
+            example_id_fn=example_id_fn,
+            lighttag_tag_name_extractor=lighttag_tag_name_extractor,
+        )
     return suggestions
