@@ -1,7 +1,8 @@
 from typing import Callable, List
 
 from type_definitions.adm_types import ADMDoc, Entity
-from type_definitions.lighttag_suggestion_types import LTSuggestionInput
+from type_definitions.lighttag_suggestion_types import LTSuggestionInput, LTExampleSuggestionsWithTestament, \
+    LTSuggestionsWithTestaments
 
 
 def default_example_id_fn(doc: ADMDoc) -> str:
@@ -18,7 +19,7 @@ def adm_doc_to_lighttag_suggetions(
     doc: ADMDoc,
     example_id_fn: Callable[[ADMDoc], str] = default_example_id_fn,
     lighttag_tag_name_extractor: Callable[[Entity], str] = default_tag_name_extractor,
-) -> List[LTSuggestionInput]:
+) -> LTExampleSuggestionsWithTestament:
     """
 
     :param doc:  An ADMDoc container the predictions from Rosette
@@ -40,14 +41,18 @@ def adm_doc_to_lighttag_suggetions(
             "text": mention["normalized"],
         }
         suggestions.append(suggestion)
-    return suggestions
+    return {
+        'suggestions':suggestions,
+        'seen_example_id':example_id
+    }
+
 
 
 def adm_document_list_to_lighttag_suggestions(
     docs: List[ADMDoc],
     example_id_fn: Callable[[ADMDoc], str] = default_example_id_fn,
     lighttag_tag_name_extractor: Callable[[Entity], str] = default_tag_name_extractor,
-):
+) ->LTSuggestionsWithTestaments:
     """
 
     :param docs: A list of ADM Docs
@@ -55,11 +60,17 @@ def adm_document_list_to_lighttag_suggestions(
     :param lighttag_tag_name_extractor:
     :return: LightTag suggestions to be sent to LightTag
     """
-    suggestions: List[LTSuggestionInput] = []
+    result :LTSuggestionsWithTestaments = {
+        'suggestions':[],
+        'seen_example_ids':[]
+    }
+
     for doc in docs:
-        suggestions += adm_doc_to_lighttag_suggetions(
+        testament_with_suggestions :LTExampleSuggestionsWithTestament = adm_doc_to_lighttag_suggetions(
             doc,
             example_id_fn=example_id_fn,
             lighttag_tag_name_extractor=lighttag_tag_name_extractor,
         )
-    return suggestions
+        result['suggestions']+=testament_with_suggestions['suggestions']
+        result['seen_example_ids'].append(testament_with_suggestions['seen_example_id'])
+    return result
