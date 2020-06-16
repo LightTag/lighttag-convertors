@@ -7,7 +7,7 @@ from type_definitions.lighttag_suggestion_types import LTSuggestionInput, LTExam
 
 def default_example_id_fn(doc: ADMDoc) -> str:
     # TODO @Nadav, I think you changed the type of the metadata to be a list ?
-    return doc["documentMetadata"]["lighttag_example_id"]
+    return doc["documentMetadata"]["lighttag_example_id"][0]
 
 
 def default_tag_name_extractor(entity: Entity) -> str:
