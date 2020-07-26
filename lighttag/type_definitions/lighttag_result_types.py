@@ -26,11 +26,19 @@ class Classification(TypedDict):
     classified_by:List[Testament]
 
 
+class LTInputExample(TypedDict):
+    '''
+    Minimal object to send to LightTag
+    '''
+    example_id:Optional[str] # Optionally specify a UUID in hex format
+    content:str
+    metadata:Dict[Any,Any]
 
-class Example(TypedDict):
+class LTExample(TypedDict):
     example_id:str
     content:str
     metadata:Dict[Any,Any]
     seen_by:List[Testament]
     annotations:List[Annotation]
     classifications:List[Classification]
+__all__ = (Testament, Annotation, Classification, LTExample)

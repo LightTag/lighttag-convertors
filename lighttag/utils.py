@@ -1,6 +1,6 @@
-from typing import List, Callable, Optional
+from typing import Callable
 import re,unicodedata
-from type_definitions.lighttag_result_types import Example, Annotation
+from lighttag.type_definitions import LTExample, Annotation
 
 def filter_predicate_factory(reviewed_only:bool) -> Callable[[Annotation],bool]:
 
@@ -14,7 +14,7 @@ def filter_predicate_factory(reviewed_only:bool) -> Callable[[Annotation],bool]:
     return predicate
 
 
-def sort_example_annotations(example: Example,reviewed_only:bool=False) -> Example:
+def sort_example_annotations(example: LTExample, reviewed_only:bool=False) -> LTExample:
     filter_predicate = filter_predicate_factory(reviewed_only)
     not_incorrect_annotations = filter(
         filter_predicate, example["annotations"]
@@ -23,7 +23,7 @@ def sort_example_annotations(example: Example,reviewed_only:bool=False) -> Examp
     return example
 
 
-def check_annotations_have_conflicts(example: Example) -> bool:
+def check_annotations_have_conflicts(example: LTExample) -> bool:
     example = sort_example_annotations(example)
     annotations = example["annotations"]
     max_end = 0

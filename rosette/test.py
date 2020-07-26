@@ -1,6 +1,6 @@
 import json
-from lighttag_to_adm import save_lighttag_job_to_adm
-from configuration import ConfigurationUtil
+from rosette.lighttag_to_adm import save_lighttag_job_to_adm
+from rosette.configuration import ConfigurationUtil
 
 
 if __name__ == "__main__":

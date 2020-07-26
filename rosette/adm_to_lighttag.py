@@ -1,7 +1,7 @@
 from typing import Callable, List
 
-from type_definitions.adm_types import ADMDoc, Entity
-from type_definitions.lighttag_suggestion_types import LTSuggestionInput, LTExampleSuggestionsWithTestament, \
+from rosette.type_definitions.adm_types import ADMDoc, Entity
+from lighttag.type_definitions import LTSuggestionInput, LTExampleSuggestionsWithTestament, \
     LTSuggestionsWithTestaments
 
 

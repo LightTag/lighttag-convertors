@@ -9,7 +9,7 @@ pip install -r requirements.txt
 
 ```python
 import json
-from lighttag_to_adm import save_lighttag_job_to_adm
+from rosette.lighttag_to_adm import save_lighttag_job_to_adm
 #Load your LightTag data
 data = json.load(open('/home/tal/Downloads/financialsample2_annotations.json'))
 ```

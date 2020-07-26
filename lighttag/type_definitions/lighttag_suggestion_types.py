@@ -22,3 +22,5 @@ class LTSuggestionsWithTestaments(TypedDict):
     '''
     seen_example_ids:List[str] # The list of all examples the model has seen
     suggestions:List[LTSuggestionInput] #The models suggestions if any
+
+__all__ =(LTExampleSuggestionsWithTestament,LTExampleSuggestionsWithTestament,LTSuggestionsWithTestaments)

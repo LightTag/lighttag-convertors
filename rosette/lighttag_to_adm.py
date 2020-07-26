@@ -1,11 +1,11 @@
 from typing import List
 
-from conflict_resolver import resolve_annotation_conflicts
-from type_definitions.adm_types import ADMDoc, Entity, EntitiesList, ADMAttributes
-from type_definitions.lighttag_job import JobResult
-from type_definitions.lighttag_result_types import Example, Annotation
-from utils import sort_example_annotations, make_slug
-from configuration import ConfigurationUtil
+from lighttag.conflict_resolver import resolve_annotation_conflicts
+from rosette.type_definitions.adm_types import ADMDoc, Entity, EntitiesList, ADMAttributes
+from lighttag.type_definitions import JobResult
+from lighttag.type_definitions import LTExample, Annotation
+from lighttag.utils import sort_example_annotations, make_slug
+from rosette.configuration import ConfigurationUtil
 import json
 import os
 
@@ -37,7 +37,7 @@ def convert_lighttatg_annotation_to_adm(anno: Annotation) -> Entity:
 
 
 
-def get_converted_metadata(example: Example):
+def get_converted_metadata(example: LTExample):
     res = dict()
     for key, value in example["metadata"].items():
         if type(value) is list:
@@ -50,7 +50,7 @@ def get_converted_metadata(example: Example):
 
 
 def convert_lighttag_example_to_adm(
-    example: Example, reviewed_only, exclude_attributes
+    example: LTExample, reviewed_only, exclude_attributes
 ) -> ADMDoc:
     example = sort_example_annotations(example, reviewed_only=reviewed_only)
     example['annotations'] = resolve_annotation_conflicts(example['annotations'])
