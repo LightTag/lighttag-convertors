@@ -2,14 +2,14 @@ import json
 import os
 from typing import List
 
-from google_automl.type_definitions import (
-    GML_JSONLExample,
+from google_automl.pdf.type_definitions import (
+    GML_PDF_JSONLExample,
     LTInputExampleFromGML,
 )
 
 
 def gml_example_to_lighttag_example(
-    gml: GML_JSONLExample, filename: str
+    gml: GML_PDF_JSONLExample, filename: str
 ) -> LTInputExampleFromGML:
     '''
 
@@ -33,7 +33,7 @@ def gml_json_to_lighttag_example(
     '''
     with open(filepath) as f:
         filename = f.name
-        gml :GML_JSONLExample = json.load(f)
+        gml :GML_PDF_JSONLExample = json.load(f)
         return gml_example_to_lighttag_example(gml,filename=filename)
 def gml_dir_to_lighttag_examples(path:str) ->List[LTInputExampleFromGML]:
     '''

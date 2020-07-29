@@ -2,7 +2,8 @@ from typing import List, Optional
 import warnings
 from typing_extensions import TypedDict
 
-from lighttag.type_definitions import Annotation
+from lighttag.type_definitions.lighttag_result_types import Annotation
+
 
 class Span(TypedDict):
     start :int
